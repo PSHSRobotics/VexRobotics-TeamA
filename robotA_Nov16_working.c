@@ -42,49 +42,31 @@ void lift(int speed){
 
 // open claw
 void open(){
-	setMotor(port6, 127);
+	/*setMotor(port6, 127);
 	wait(1.5);
+	stopMotor(port6);*/
+	setMotor(port6, 127);
+	forward(127);
 	stopMotor(port6);
 }
 
 // close claw
 void close(){
+	/*
 	setMotor(port6, -127);
 	wait(1.5);
+	stopMotor(port6);\
+	*/
+	setMotor(port6, -127);
+	forward(-127);
 	stopMotor(port6);
 }
 
-task main(){
-	// port2 and port3 are for the motors
-	// port4 is to lift the claw
-	// port5 is to open and close the claw
-	int isForward = 1;
-	int speed = 10;
+task claw()
+{
 	while(1==1){
-		if(vexRT[Btn8U] == 1){
-			moveForward(speed);
-			if(speed <= 127){
-				speed += 1;}
-			}
-
-  	if(vexRT[Btn6D] == 1){
-			stopAllMotors();
-			speed = 10;
-			}
-
-		if(vexRT[Btn8D] == 1){
-			moveBackward(-1 * speed);
-			if(speed <= 127){
-				speed += 1;
-			}
-		}
-		if(vexRT[Btn8L] == 1){
-			left(-127);
-		}
-		if(vexRT[Btn8R] == 1){
-			right(-127);
-		}
-		if(vexRT[Btn5U] == 1){
+		if(vexRT[Btn5U] == 1)
+		{
 			lift(-66);
 		}
 		if(vexRT[Btn5D] == 1){
@@ -96,6 +78,51 @@ task main(){
 		if(vexRT[Btn7D] == 1){
 			close();
 		}
+	}
+}
+
+task drive()
+{
+	int isForward = 1;
+	int speed = 10;
+	while(1==1){
+		if(vexRT[Btn8U] == 1){
+			moveForward(speed);
+			if(speed <= 127){
+				speed += 2;}
+			}
+
+  	if(vexRT[Btn6D] == 1){
+			stopAllMotors();
+			speed = 10;
+			}
+
+		if(vexRT[Btn8D] == 1){
+			moveBackward(-1 * speed);
+			if(speed <= 127){
+				speed += 2;
+			}
+		}
+		if(vexRT[Btn8L] == 1){
+			left(-127);
+		}
+		if(vexRT[Btn8R] == 1){
+			right(-127);
+		}
 
 	}
+}
+
+task main(){
+	// port2 and port3 are for the motors
+	// port4 is to lift the claw
+	// port5 is to open and close the claw
+
+	startTask(claw)
+	startTask(drive)
+	while(true){
+		wait()
+	}
+
+
 }
